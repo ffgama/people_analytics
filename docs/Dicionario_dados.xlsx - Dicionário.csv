@@ -1,0 +1,37 @@
+Campo,Tipo,Outros detalhes:
+Age,Numérica - Discreta,Education
+Attrition,Categórica ,1 'Below College'
+BusinessTravel,Categórica,2 'College'
+DailyRate,Numérica - Discreta,3 'Bachelor'
+Department,Categórica,4 'Master'
+DistanceFromHome,Numérica - Discreta,5 'Doctor'
+Education,Categórica,EnvironmentSatisfaction
+EducationField,Categórica,1 'Low'
+EmployeeCount,Numérica - Discreta,2 'Medium'
+EmployeeNumber,Numérica - Discreta,3 'High'
+EnvironmentSatisfaction,Categórica,4 'Very High'
+Gender,Categórica,JobInvolvement  
+HourlyRate,Numérica - Discreta,1 'Low'
+JobInvolvement,Categórica,2 'Medium'
+JobLevel,Categórica,3 'High'
+JobRole,Categórica,4 'Very High'
+JobSatisfaction,Categórica,JobSatisfaction  
+MaritalStatus,Categórica,1 'Low'
+MonthlyIncome,Numérica - Discreta,2 'Medium'
+MonthlyRate,Numérica - Discreta,3 'High'
+NumCompaniesWorked,Numérica - Discreta,4 'Very High'
+Over18,Categórica,PerformanceRating  
+OverTime,Categórica,1 'Low'
+PercentSalaryHike,Numérica - Discreta,2 'Good'
+PerformanceRating,Categórica,3 'Excellent'
+RelationshipSatisfaction,Categórica,4 'Outstanding'
+StandardHours,Numérica - Discreta,RelationshipSatisfaction  
+StockOptionLevel,Categórica,1 'Low'
+TotalWorkingYears,Numérica - Discreta,2 'Medium'
+TrainingTimesLastYear,Numérica - Discreta,3 'High'
+WorkLifeBalance,Categórica,4 'Very High'
+YearsAtCompany,Numérica - Discreta,WorkLifeBalance  
+YearsInCurrentRole,Numérica - Discreta,1 'Bad'
+YearsSinceLastPromotion,Numérica - Discreta,2 'Good'
+YearsWithCurrManager,Numérica - Discreta,3 'Better'
+,,4 'Best'

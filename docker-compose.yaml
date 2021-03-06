@@ -1,0 +1,12 @@
+version: '3.6'
+services: 
+  rstudio:
+    build: .
+    container_name: ds_rstudio
+    ports: 
+      - ${NUMBER_PORT_RSTUDIO}:8787
+    volumes:
+      - ${LOCAL_WORKING_DIR}:/home/rstudio
+    env_file: .env
+    environment:
+      - DISABLE_AUTH=true

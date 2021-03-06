@@ -1,2 +1,2 @@
-# people_analytics
-People Analytics 
+# People Analytics
+Case of People Analytics 
