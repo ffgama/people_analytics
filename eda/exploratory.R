@@ -518,7 +518,10 @@ test_result = run_chitest_sample(contingency_matrix_tbl)
 plot_corr_categorical_raw_values(test_result)
 plot_corr_categorical_impact_score(test_result)
 
-# Enfim, chegamos ao fim dessa etapa de selecao previa de features potenciais para o Attrition. Colaboradores que precisamos ficar atentos:
+# Enfim, chegamos ao fim dessa etapa de selecao previa de features potenciais para o Attrition. Dessa maneira conseguimos responder o nosso 
+# primeiro questionamento: "1) que fatores contribuem para o attrition?"
+
+# Colaboradores que precisamos ficar atentos:
 
 # 1) Age: colaboradores com ate 32 anos.
 # 2) DistanceFromHome: colaboradores que moram mais distantes do trabalho.
@@ -535,3 +538,15 @@ plot_corr_categorical_impact_score(test_result)
 # 13) JobRole: colaboradores no cargo de representante de vendas.
 # 14) OverTime: colaboradores que fazem hora extra.
 # 15) WorkLifeBalance: colaboradores que nao adotam equilibrio entre vida pessoal e profissional.
+
+# Inicialmente, tambem levantamos a pergunta: "2) com base nos dados que temos, sera que poderemos criar uma solucao preditiva 
+# para ajudar o time de RH a antecipar esses problemas e propor iniciativas para minimizar o attrition?" 
+
+# Atraves desas features que realizamos o estudo previo, podemos fazer uma primeira iteracao na construcao de um modelo preditivo. 
+# Faremos isso nas etapas seguintes, vamos salvar uma copia do nosso dataset.
+people_data = people_data %>%
+  select(Age, DistanceFromHome, MonthlyIncome, TotalWorkingYears, TrainingTimesLastYear, YearsAtCompany, YearsInCurrentRole,
+         YearsWithCurrManager, Department, EnvironmentSatisfaction, JobInvolvement, JobSatisfaction, JobRole, OverTime,
+         WorkLifeBalance, Attrition)
+
+write.csv(people_data, file = "eda/data/data_people_filtered.csv", row.names = FALSE)
