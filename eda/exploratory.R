@@ -417,23 +417,6 @@ people_data %>%
                              xlab = "", ylab = "Total de colaboradores",
                              group_name = "Attrition")
 
-# Entao ate o presente momento temos um cenario favoravel para o aumento de Attrition: 
-
-# 1) Age: em pelo menos metade dos colaboradores com ate 32 anos.
-# 2) DistanceFromHome: colaboradores que moram mais distantes do trabalho.
-# 3) MonthlyIncome: colaboradores que possuem uma remuneracao mais baixa.
-# 4) TotalWorkingYears: colaboradores menos experientes.
-# 5) TrainingTimesLastYear: colaboradores que investiram menos tempo em treinamentos no ultimo ano.
-# 6) YearsAtCompany: colaboradores com menos tempo de empresa.
-# 7) YearsInCurrentRole: colaboradores com baixa experiencia no cargo atual.
-# 8) YearsWithCurrManager: colaboradores menos adaptados a lideranca atual.
-# 9) Department: colaboradores do setor de vendas tem mais chances de Attrition.
-# 10) EnvironmentSatisfaction: colaboradores insatisfeitos com o clima da empresa.
-# 11) JobInvolvement: colaboradores com baixo nivel de envolvimento com o cargo que ocupam.
-# 12) JobSatisfaction: colaboradores com baixa satisfacao em relacao ao cargo.
-# 13) JobRole: colaboradores no cargo de representante de vendas.
-# 14) OverTime: colaboradores que fazem hora extra.
-
 # Colaboradores com horas extras de fato, tendem a afetar o Attrition. Isso porque, dependendo da demanda e frequencia da horas extras, isso 
 # pode criar um desgaste natural do colaborador e, como consequencia, aumentar as chances de desligamento.
 
@@ -449,22 +432,6 @@ people_data %>%
 # Colaboradores que nao adotam um bom gerenciamento de tempo entre vida pessoal e profissional tendem a se desgastar com o tempo. Horas extras,
 # pode entrar como um fator que interefere nessa feature.
 
-# 1) Age: em pelo menos metade dos colaboradores com ate 32 anos.
-# 2) DistanceFromHome: colaboradores que moram mais distantes do trabalho.
-# 3) MonthlyIncome: colaboradores que possuem uma remuneracao mais baixa.
-# 4) TotalWorkingYears: colaboradores menos experientes.
-# 5) TrainingTimesLastYear: colaboradores que investiram menos tempo em treinamentos no ultimo ano.
-# 6) YearsAtCompany: colaboradores com menos tempo de empresa.
-# 7) YearsInCurrentRole: colaboradores com baixa experiencia no cargo atual.
-# 8) YearsWithCurrManager: colaboradores menos adaptados a lideranca atual.
-# 9) Department: colaboradores do setor de vendas tem mais chances de Attrition.
-# 10) EnvironmentSatisfaction: colaboradores insatisfeitos com o clima da empresa.
-# 11) JobInvolvement: colaboradores com baixo nivel de envolvimento com o cargo que ocupam.
-# 12) JobSatisfaction: colaboradores com baixa satisfacao em relacao ao cargo.
-# 13) JobRole: colaboradores no cargo de representante de vendas.
-# 14) OverTime: colaboradores que fazem hora extra.
-# 15) WorkLifeBalance: colaboradores que nao sao adotam equilibrio entre vida pessoal e profissional. 
-
 
 # Cargo
 # Vamos aplicar o teste do Chi-quadrado para independencia para identicar associacao entre as variaveis
@@ -474,7 +441,6 @@ contingency_matrix_tbl = get_contingency_table(people_data, "Attrition", "Depart
 # H1: existe dependencia entre as variaveis sao dependentes (correlacao != 0)
 # Novamente consideraremos nivel de significancia: alpha = 5%
 test_result = run_chitest_sample(contingency_matrix_tbl)
-
 
 # Aqui temos o valor que fora observado na nossa amostra
 # contingency_matrix_tbl
@@ -501,9 +467,71 @@ plot_corr_categorical_raw_values(test_result)
 #  Cargo de vendas tem um percentual um impacto maior para determinar a relacao de dependencia entre a feature Cargo e o Attrition.
 plot_corr_categorical_impact_score(test_result)
 
+# Vamos passear por outras variaveis categoricas...
 
+# EnvironmentSatisfaction
+contingency_matrix_tbl = get_contingency_table(people_data, "Attrition", "EnvironmentSatisfaction")
+test_result = run_chitest_sample(contingency_matrix_tbl)
+# Existe uma relacao positiva entre baixa satisfacao e Attrition
+plot_corr_categorical_raw_values(test_result)
+# Impacto significativo no desligamento quanto o colaborador esta insatisfeito com o clima. 
+plot_corr_categorical_impact_score(test_result)
 
+# JobInvolvement
+contingency_matrix_tbl = get_contingency_table(people_data, "Attrition", "JobInvolvement")
+test_result = run_chitest_sample(contingency_matrix_tbl)
+# Baixo e medio envolvimento com cargo tem uma relacao positiva com o Attrition. Por outro lado existe tambem significativo no 
+# Attrition quando o colaborador esta altamente envolvido no cargo, so que a associacao com o Attrition e negativa, ou seja, 
+# quanto maior o envolvimento com o cargo, menor as chances do colaborador pedir desligamento.
+plot_corr_categorical_raw_values(test_result)
+# Novamente identificamos que o baixo envolvimento do colaborador tem um impacto significativo no Attrition
+plot_corr_categorical_impact_score(test_result)
 
+# JobSatisfaction
+# Os extremos: Baixa satisfacao e satisfacao muito alta tem um peso determinante para o Attrition
+contingency_matrix_tbl = get_contingency_table(people_data, "Attrition", "JobSatisfaction")
+test_result = run_chitest_sample(contingency_matrix_tbl)
+plot_corr_categorical_raw_values(test_result)
+plot_corr_categorical_impact_score(test_result)
 
-people_data %>% head(2)
-features_description$WorkLifeBalance
+# JobRole
+# Outra feature que poderemos considerar importante especialmente pela presenca do cargo de Representativa de vendas 
+# que esta altamente associado com Attrition
+contingency_matrix_tbl = get_contingency_table(people_data, "Attrition", "JobRole")
+test_result = run_chitest_sample(contingency_matrix_tbl)
+plot_corr_categorical_raw_values(test_result)
+plot_corr_categorical_impact_score(test_result)
+
+# OverTime
+# Esta feature tambem e importante especialmente porque demonstrou-se altamente discriminativa. Especialmente porque temos relacoes inversas, a grosso
+# modo: colaboradores que pediram desligamento ja fizeram horas extras, colaboradores que permaneceram na empresa nunca fizeram.
+contingency_matrix_tbl = get_contingency_table(people_data, "Attrition", "OverTime")
+test_result = run_chitest_sample(contingency_matrix_tbl)
+plot_corr_categorical_raw_values(test_result)
+plot_corr_categorical_impact_score(test_result)
+
+# WorkLifeBalance
+# O equilibrio entre vida e profissional tambem e um fator importante para decisao do colaborador de permanecer na empresa. Isso acontece, 
+# especialmente entre os que **nao** possuem o devido equilibrio.
+contingency_matrix_tbl = get_contingency_table(people_data, "Attrition", "WorkLifeBalance")
+test_result = run_chitest_sample(contingency_matrix_tbl)
+plot_corr_categorical_raw_values(test_result)
+plot_corr_categorical_impact_score(test_result)
+
+# Enfim, chegamos ao fim dessa etapa de selecao previa de features potenciais para o Attrition. Colaboradores que precisamos ficar atentos:
+
+# 1) Age: colaboradores com ate 32 anos.
+# 2) DistanceFromHome: colaboradores que moram mais distantes do trabalho.
+# 3) MonthlyIncome: colaboradores que possuem uma remuneracao mais baixa.
+# 4) TotalWorkingYears: colaboradores menos experientes.
+# 5) TrainingTimesLastYear: colaboradores que investiram menos tempo em treinamentos no ultimo ano.
+# 6) YearsAtCompany: colaboradores com menos tempo de empresa.
+# 7) YearsInCurrentRole: colaboradores com baixa experiencia no cargo atual.
+# 8) YearsWithCurrManager: colaboradores menos adaptados a lideranca atual.
+# 9) Department: colaboradores do setor de vendas tem mais chances de Attrition.
+# 10) EnvironmentSatisfaction: colaboradores insatisfeitos com o clima da empresa.
+# 11) JobInvolvement: colaboradores com baixo nivel de envolvimento com o cargo que ocupam.
+# 12) JobSatisfaction: colaboradores com baixa satisfacao em relacao ao cargo.
+# 13) JobRole: colaboradores no cargo de representante de vendas.
+# 14) OverTime: colaboradores que fazem hora extra.
+# 15) WorkLifeBalance: colaboradores que nao adotam equilibrio entre vida pessoal e profissional.
