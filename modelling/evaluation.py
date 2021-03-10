@@ -96,7 +96,6 @@ plt.legend(loc='upper right',fontsize='12')
 data_test['IIF_score'] = data_test['MonthlyIncome']*12*100/100
 
 # contabilizando os custos
-# quanto o modelo ajudou a economizar?
 data_test['IIF_score'].sum().astype(int)
 # Ou seja todos pedissem demissao o prejuizo total seria de mais de 35 milhoes!
 
@@ -115,9 +114,3 @@ data_test.groupby(['Attrition','prediction'])['IIF_score'].mean().round(2)
 # Temos um total de 116 colaboradores nesse bolo (em torno de 26% do total)
 data_test.query('prob_desligamento > 0.5').shape
 data_test.query('prob_desligamento > 0.5 and Attrition==1')['IIF_score'].sum()
-
-# Se reduzirmos pela metade os colaboradores focando nos que tem no minimo 70%
-# de probabilidade e tivermos 100% de retencao teremos uma economia de  
-# 1,3 milhoes (34% dos custos totais)
-data_test.query('prob_desligamento > 0.7').shape
-data_test.query('prob_desligamento > 0.7 and Attrition==1')['IIF_score'].sum()

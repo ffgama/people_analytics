@@ -124,7 +124,6 @@ shapiro.test(people_data$Age)
 # Os jovens tendem a se desligar mais das empresas, um fator que talvez possa ser considerado seria a dinamica do mercado.
 run_ttest_sample(people_data, formula = Age ~ Attrition)
 
-
 # Distancia do trabalho para casa
 people_data %>%
   plot_box_compare_groups(feature_num = "DistanceFromHome", 
