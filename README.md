@@ -29,6 +29,7 @@ modelling/
 ```
 
 <hr>
+
 ## Docker compose
 
  - **RStudio**: uset to exploratory analysis. Official image can be accessed [here](https://hub.docker.com/r/rocker/rstudio/dockerfile)
