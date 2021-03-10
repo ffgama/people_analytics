@@ -1,5 +1,4 @@
-# People Analytics
-## People Analytics Case
+# People Analytics Case
 <hr>
 
 ### What are the reasons that  influence  attrition ?
