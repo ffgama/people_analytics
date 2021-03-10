@@ -77,6 +77,8 @@ people_data = people_data %>%
          YearsWithCurrManager,
          Attrition) 
 
+write.csv(people_data, file = "eda/data/data_people_full.csv", row.names = FALSE)
+
 # ANALISE 
 View(people_data)
 
