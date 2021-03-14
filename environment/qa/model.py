@@ -8,7 +8,7 @@ from sklearn.pipeline import make_pipeline
 import joblib
 from sklearn.metrics import classification_report
 
-data_people = read_csv('../eda/data/data_people_prepared.csv')
+data_people = read_csv('../../eda/data/data_people_prepared.csv')
 
 data_people['Attrition'] = data_people['Attrition'].map({'No': 0, 'Yes': 1})
 
