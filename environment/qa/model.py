@@ -6,7 +6,6 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.compose import make_column_transformer
 from sklearn.pipeline import make_pipeline
 import joblib
-from sklearn.metrics import classification_report
 
 data_people = read_csv('../../eda/data/data_people_prepared.csv')
 
@@ -20,10 +19,10 @@ split_definition = StratifiedShuffleSplit(n_splits=1,
                                           random_state=42)
 
 for train_index, test_index in split_definition.split(X, y):
-    # print("TRAIN:", train_index, "TEST:", test_index)
     X_train, X_test = X.iloc[train_index], X.iloc[test_index]
     y_train, y_test = y[train_index], y[test_index]
-    
+
+
 num_features = ['Age', 'DistanceFromHome', 'MonthlyIncome',
                 'TotalWorkingYears', 'TrainingTimesLastYear',
                 'YearsAtCompany', 'YearsInCurrentRole',
@@ -67,11 +66,6 @@ random_grid = RandomizedSearchCV(
 random_search = random_grid.fit(X_train, y_train)
 
 best_params = random_search.best_params_
-# best_score = random_search.best_score_
-# print('\n=========')
-# print("Best Score: {}".format(best_score))
-# print("Best parameters : {}".format(best_params))
-# print('=========')
 
 pipe = make_pipeline(preprocessing, LogisticRegression(
      class_weight=best_params['logisticregression__class_weight'],
@@ -81,9 +75,4 @@ pipe = make_pipeline(preprocessing, LogisticRegression(
 
 model = pipe.fit(X_train, y_train)
 
-# save the model to disk
 joblib.dump(model, filename='logit_model.pkl')
-
-y_pred = model.predict(X_test)
-
-print(classification_report(y_test, y_pred))
