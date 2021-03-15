@@ -7,13 +7,19 @@
 
 1. docs: attachment documents
 2. eda: ETL for data analysis + scripts of EDA and methods (utilities) for the support EDA.
-3. modelling: previous data preparation + building and evaluation of the model
+3. modelling: previous data preparation + building and evaluation of the model.
+4. environment: preparaing models for the testing and production environment.
 
 <hr>
 
 ```
 docs/
 	data_dictionary.csv
+	
+enviroment/
+	|-- qa/
+	|-- prod/
+
 eda/
 	|-- data/
 	|-- etl/
