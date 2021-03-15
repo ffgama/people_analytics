@@ -45,6 +45,6 @@ modelling/
 
 ## Application
 
-You can access our application through link: https://prediction-attrition-app.herokuapp.com/
+You can access and interact with our humble application through the link: https://prediction-attrition-app.herokuapp.com/
 
 :rocket:
