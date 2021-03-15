@@ -43,5 +43,8 @@ modelling/
 
  Open terminal and type `docker-compose up`. Open terminal and type `docker-compose up -d`.
 
+## Application
+
+You can access our application through link: https://prediction-attrition-app.herokuapp.com/
 
 :rocket:
