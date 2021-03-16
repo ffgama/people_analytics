@@ -16,7 +16,7 @@
 docs/
 	data_dictionary.csv
 	
-enviroment/
+environment/
 	|-- qa/
 	|-- prod/
 
