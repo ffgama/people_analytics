@@ -1,14 +1,15 @@
 from pandas import read_csv
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
+from numpy import linspace, arange
+from sklearn.model_selection import StratifiedShuffleSplit, RandomizedSearchCV
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.linear_model import LogisticRegression
+from sklearn.compose import make_column_transformer
+from sklearn.pipeline import make_pipeline
 from sklearn.metrics import (classification_report,
                              precision_recall_curve,
                              plot_precision_recall_curve
                              )
-from pandas import get_dummies
-from numpy import linspace, arange
-from sklearn.model_selection import RandomizedSearchCV
+import joblib
 
 # Carregando o dataset apenas com as features que selecionamos
 # na etapa exploratoria
@@ -17,36 +18,55 @@ data_people.info()
 
 data_people['Attrition'] = data_people['Attrition'].map({'No': 0, 'Yes': 1})
 
-obj_columns = data_people.select_dtypes('object')
-data_people_enc = get_dummies(data_people, columns=obj_columns.columns)
-
 # Preparando os dados antes do split
-X = data_people_enc.drop('Attrition', axis=1)
+X = data_people.drop('Attrition', axis=1)
 y = data_people[['Attrition']].values.ravel()
 
-# Padronizando as features
-scaler = StandardScaler()
-int_cols = X.select_dtypes('int64').columns
-X.loc[:, int_cols] = scaler.fit_transform(X[int_cols])
+# Definicao do criterio de split: a proporcao de desbalanceamento do target
+# se mantem
+split_definition = StratifiedShuffleSplit(n_splits=1,
+                                          test_size=0.3, train_size=0.7,
+                                          random_state=42)
 
-# Definicao do split de treino: 70/30
-X_train, X_test, y_train, y_test = train_test_split(X, y,
-                                                    test_size=0.3,
-                                                    random_state=42)
 
-baseline = LogisticRegression()
+# Aplicaco do split de treino e teste
+for train_index, test_index in split_definition.split(X, y):
+    X_train, X_test = X.iloc[train_index], X.iloc[test_index]
+    y_train, y_test = y[train_index], y[test_index]
+
+# features numericas
+num_features = ['Age', 'DistanceFromHome', 'MonthlyIncome',
+                'TotalWorkingYears', 'TrainingTimesLastYear',
+                'YearsAtCompany', 'YearsInCurrentRole',
+                'YearsWithCurrManager']
+# features categoricas
+cat_features = ['Department', 'EnvironmentSatisfaction',
+                'JobInvolvement', 'JobSatisfaction',
+                'JobRole', 'OverTime', 'WorkLifeBalance']
+
+# Definicao do pipeleline de transformacao
+preprocessing = make_column_transformer(
+    (StandardScaler(), num_features),
+    (OneHotEncoder(), cat_features)
+)
+# Pipeline do baseline model
+pipe = make_pipeline(preprocessing, LogisticRegression())
+
+grid_params = {
+    # weights associated the target {class_label: weight}
+    'logisticregression__class_weight': (
+        [{0: x, 1: 1.0-x} for x in linspace(0.05, 0.95, 20)]
+    ),
+    # C = 1/lambda. C: regularization parameter and Lambda: penalty
+    # controlling.
+    'logisticregression__C': arange(5, 80, 5),
+    # Max. interacations for the algorithm convergence
+    'logisticregression__max_iter': arange(1000, 8000, 200)
+}
 
 random_grid = RandomizedSearchCV(
-    baseline,
-    param_distributions={
-        # weights associated the target {class_label: weight}
-        'class_weight': [{0: x, 1: 1.0-x} for x in linspace(0.05, 0.95, 20)],
-        # C = 1/lambda. C: regularization parameter and Lambda: penalty
-        # controlling.
-        'C': arange(5, 80, 5),
-        # Max. interacations for the algorithm convergence
-        'max_iter': arange(1000, 8000, 200)
-    },
+    pipe,
+    param_distributions=grid_params,
     # maximum number of iterations taken for the solvers to converge.
     n_iter=100,
     # evaluation metric
@@ -61,16 +81,17 @@ random_search = random_grid.fit(X_train, y_train)
 print('\n=========')
 print("Best parameters : {}".format(random_search.best_params_))
 
-model = LogisticRegression(
-    **random_search.best_params_
-)
+best_params = random_search.best_params_
 
-model.fit(X_train, y_train)
-# Em ambiente de producao salvariamos todos os artefatos
-# necessarios: parametros escolhidos, features, pickle, etc.
-# Ex. melhores parametros de tuning: dict_params = {'max_iter': 4000,
-# 'class_weight': {0: 0.2, 1: 0.8},
-# 'C': 80}
+pipe = make_pipeline(preprocessing, LogisticRegression(
+     class_weight=best_params['logisticregression__class_weight'],
+     C=best_params['logisticregression__C'],
+     max_iter=best_params['logisticregression__max_iter']
+))
+
+model = pipe.fit(X_train, y_train)
+
+joblib.dump(model, filename='logit_model.pkl')
 
 y_pred = model.predict(X_test)
 
@@ -80,13 +101,10 @@ print(classification_report(y_test, y_pred))
 # extraindo as probabilidades de pertencer a uma classe
 y_prob_pred = model.predict_proba(X_test)[:, 1]
 
-X_test.loc[:, int_cols] = scaler.inverse_transform(X_test.loc[:, int_cols])
-
 data_test = data_people.iloc[X_test.index, ]
 data_test['prediction'] = y_pred
 data_test['prob_desligamento'] = y_prob_pred
 
-# 61 colaboradores pediram desligamentos
 data_test['Attrition'].value_counts()
 
 # salvando nosso dataset

@@ -1,5 +1,4 @@
 from pandas import read_csv, DataFrame
-from statsmodels.stats.outliers_influence import variance_inflation_factor 
 
 data_people = read_csv('../eda/data/data_people_filtered.csv')
 data_people.info()
@@ -12,10 +11,10 @@ data_people['Attrition'].value_counts(normalize=True)
 # from_to_features = {
 #     'Attrition':
 #         {
-#             'Yes': 1, 
+#             'Yes': 1,
 #             'No': 0
 #         },
-#     'Department': 
+#     'Department':
 #         {
 #             'Research & Development':1,
 #             'Sales': 2,
@@ -66,7 +65,6 @@ data_people['Attrition'].value_counts(normalize=True)
 #             'Better':3,
 #             'Best':4
 #         }
-        
 # }
 
 # columns_to_transforming = [
@@ -76,5 +74,5 @@ data_people['Attrition'].value_counts(normalize=True)
 
 # for c in columns_to_transforming:
 #     data_people[c] = data_people[c].map(from_to_features[c])
-    
+
 data_people.to_csv('../eda/data/data_people_prepared.csv', index_label=False)
