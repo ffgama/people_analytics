@@ -1,10 +1,16 @@
-from pandas import read_csv, DataFrame
+from utils.general_functions import *
 
-data_people = read_csv('../eda/data/data_people_filtered.csv')
-data_people.info()
+FULL_PATH = '../eda/data/data_people_filtered.csv'
+
+data_people = open_data(FULL_PATH)
 
 # dataset com desbalanceamento de classes
 data_people['Attrition'].value_counts(normalize=True)
+
+dict_cat = {'No': 0, 'Yes': 1}
+
+data_people = apply_target_transf(data_people,
+                                  'Attrition', dict_cat)
 
 # temp_data_people = data_people.copy()
 
