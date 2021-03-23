@@ -8,7 +8,7 @@
 1. docs: attachment documents
 2. eda: ETL for data analysis + scripts of EDA and methods (utilities) for the support EDA.
 3. modelling: previous data preparation + building and evaluation of the model.
-4. environment: preparaing models for the testing and production environment.
+4. environment: preparing models for the testing and production environment.
 
 <hr>
 
@@ -37,7 +37,7 @@ modelling/
 
 ## Docker compose
 
- - **RStudio**: uset to exploratory analysis. Official image can be accessed [here](https://hub.docker.com/r/rocker/rstudio/dockerfile)
+ - **RStudio**: use to exploratory analysis. Official image can be accessed [here](https://hub.docker.com/r/rocker/rstudio/dockerfile)
 
  To run to local mode with all necessary packages. You can download Dockerfile and docker-compose.yaml. 
 
