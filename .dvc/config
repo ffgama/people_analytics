@@ -1,4 +1,0 @@
-[core]
-    remote = dvc_local_remote
-['remote "dvc_local_remote"']
-    url = /tmp/dvc_files
